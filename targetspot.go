@@ -17,7 +17,7 @@
  }
 
  func handler(w http.ResponseWriter, r *http.Request) {
- 	fmt.Fprintf(w, "Hello. This is our first Go web app on Heroku!")
+ 	fmt.Fprintf(w, "Rohans App!")
  }
 
  // Get the Port from the environment so we can run on Heroku
