@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
-	"github.com/Jeffail/gabs"
 )
 
 func GetRouter(endpointMap map[string]Endpoint, ready *bool) (r *gin.Engine) {
@@ -41,16 +41,16 @@ func GetRouter(endpointMap map[string]Endpoint, ready *bool) (r *gin.Engine) {
 			context.JSON(http.StatusBadRequest, "Error")
 		}
 		jsonParsed, err := gabs.ParseJSON(body)
-		intent, _ := jsonParsed.Path("intent.displayName").Data().(string)
+		intent, _ := jsonParsed.Path("queryResult.intent.displayName").Data().(string)
 		if intent == "spot.distance" {
 			jsonResponse := gabs.New()
 			jsonResponse.Set("calculating Location", "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.String())
+			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		} else if intent == "spot.available" {
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Getting Availability", "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.String())
+			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		}
 	})
