@@ -4,6 +4,11 @@
 	"GodepVersion": "v80",
 	"Deps": [
 		{
+			"ImportPath": "github.com/Jeffail/gabs",
+			"Comment": "v1.2.0",
+			"Rev": "74ef14cf8f407ee3ca8ec01bb6f52d6104edea80"
+		},
+		{
 			"ImportPath": "github.com/gin-contrib/sse",
 			"Rev": "5545eab6dad3bbbd6c5ae9186383c2a9d23c0dae"
 		},
