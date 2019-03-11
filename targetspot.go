@@ -1,19 +1,17 @@
  package main
 
  import (
- 	"fmt"
-	 "git.target.com/StoreDataMovement/color-lizard/config"
+	 "fmt"
 	 "log"
- 	"net/http"
- 	"os"
-
+	 "net/http"
+	 "os"
  )
 
  func main() {
 	 ready := true
 	 // Read the ENV variables
-	 var endpointMap map[string]config.Endpoint
-	 err := config.ReadMockEndpointsData(&endpointMap)
+	 var endpointMap map[string]Endpoint
+	 err := ReadMockEndpointsData(&endpointMap)
  	fmt.Println("listening...")
   	router := GetRouter(endpointMap, &ready)
  	err = http.ListenAndServe(GetPort(), router)
