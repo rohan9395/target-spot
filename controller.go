@@ -1,7 +1,9 @@
-package controller
+package main
 
 import (
 	"encoding/json"
+	"git.target.com/StoreDataMovement/api-rerouter/util"
+	"git.target.com/StoreDataMovement/color-lizard/config"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"

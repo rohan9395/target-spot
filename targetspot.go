@@ -2,17 +2,21 @@
 
  import (
  	"fmt"
- 	"log"
+	 "git.target.com/StoreDataMovement/color-lizard/config"
+	 "log"
  	"net/http"
  	"os"
-  "github.com/gin-gonic/gin"
 
  )
 
  func main() {
+	 ready := true
+	 // Read the ENV variables
+	 var endpointMap map[string]config.Endpoint
+	 err := config.ReadMockEndpointsData(&endpointMap)
  	fmt.Println("listening...")
-  router := controller.GetRouter(endpointMap, &ready)
- 	err := http.ListenAndServe(GetPort(), router)
+  	router := GetRouter(endpointMap, &ready)
+ 	err = http.ListenAndServe(GetPort(), router)
  	if err != nil {
  		log.Fatal("ListenAndServe: ", err)
  	}
