@@ -5,21 +5,18 @@
  	"log"
  	"net/http"
  	"os"
+  "github.com/gin-gonic/gin"
+
  )
 
  func main() {
- 	http.HandleFunc("/", handler)
  	fmt.Println("listening...")
- 	err := http.ListenAndServe(GetPort(), nil)
+  router := controller.GetRouter(endpointMap, &ready)
+ 	err := http.ListenAndServe(GetPort(), router)
  	if err != nil {
  		log.Fatal("ListenAndServe: ", err)
  	}
  }
-
- func handler(w http.ResponseWriter, r *http.Request) {
- 	fmt.Fprintf(w, "Rohans App!")
- }
-
  // Get the Port from the environment so we can run on Heroku
 func GetPort() string {
 var port = os.Getenv("PORT")
