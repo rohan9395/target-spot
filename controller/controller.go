@@ -1,16 +1,16 @@
 package controller
 
 import (
+	"github.com/Jeffail/gabs"
+	"github.com/gin-gonic/gin"
+	"github.com/target-spot/config"
 	"github.com/target-spot/offers"
+	"github.com/target-spot/order-status"
 	"github.com/target-spot/payments"
 	"github.com/target-spot/pets"
 	"github.com/target-spot/pharmacy"
 	"github.com/target-spot/store-parking"
 	"net/http"
-	"github.com/Jeffail/gabs"
-	"github.com/gin-gonic/gin"
-	"github.com/target-spot/config"
-	"github.com/target-spot/order-status"
 )
 
 func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine) {
@@ -47,6 +47,14 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 		}
 		jsonParsed, err := gabs.ParseJSON(body)
 		intent, _ := jsonParsed.Path("queryResult.intent.displayName").Data().(string)
+
+		//There For Future Reference
+		//contextName,contextMap := util2.ContextGet(*jsonParsed)
+		//fmt.Println(contextName)
+		//fmt.Print(contextMap)
+		//json:=gabs.New()
+		//jsonContext := util2.ContextSet(*json,"90",contextName,contextMap)
+		//fmt.Print(jsonContext.String())
 
 		switch intent {
 		case "spot.distance":
