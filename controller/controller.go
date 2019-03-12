@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/target-spot/offers"
+	"github.com/target-spot/payments"
 	"github.com/target-spot/pharmacy"
 	"github.com/target-spot/store-parking"
 	"net/http"
@@ -89,6 +90,12 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			offersResponse := offers.Getoffers()
 			jsonResponse := gabs.New()
 			jsonResponse.Set(offersResponse,"fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.payments":
+			paymentsResponse := payments.GetPayments()
+			jsonResponse := gabs.New()
+			jsonResponse.Set(paymentsResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		default:
