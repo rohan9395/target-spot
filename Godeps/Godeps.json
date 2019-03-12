@@ -1,6 +1,6 @@
 {
 	"ImportPath": "github.com/target-spot",
-	"GoVersion": "go1.12",
+	"GoVersion": "go1.11",
 	"GodepVersion": "v80",
 	"Deps": [
 		{
