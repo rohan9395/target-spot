@@ -1,10 +1,11 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
-	 "github.com/target-spot/config"
-	"net/http"
+	util "github.com/target-spot/config"
 )
 
 func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine) {
@@ -35,25 +36,32 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 		})
 	})
 	r.POST("/webhook", func(context *gin.Context) {
-		body, err := context.GetRawData();if err!=nil{
+		body, err := context.GetRawData()
+		if err != nil {
 			context.JSON(http.StatusBadRequest, "Error")
 		}
 		jsonParsed, err := gabs.ParseJSON(body)
 		intent, _ := jsonParsed.Path("queryResult.intent.displayName").Data().(string)
 
-		if intent == "spot.distance" {
+		switch intent {
+		case "spot.distance":
 			jsonResponse := gabs.New()
 			jsonResponse.Set("calculating Location", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
-		} else if intent == "spot.available" {
+		case "spot.available":
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Getting Availability", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
-		}else if intent == "spot.setstore" {
+		case "spot.setstore":
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Nearest Store Set", "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		default:
+			jsonResponse := gabs.New()
+			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		}
