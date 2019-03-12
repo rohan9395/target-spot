@@ -3,7 +3,8 @@ package controller
 import (
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
-	 "github.com/target-spot/config"
+	"github.com/target-spot/config"
+	"github.com/target-spot/order-status"
 	"net/http"
 )
 
@@ -56,8 +57,16 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			jsonResponse.Set("Nearest Store Set", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
+		}else if intent == "spot.order" {
+			orderResponse := order_status.GetOrder()
+			jsonResponse := gabs.New()
+			jsonResponse.Set(orderResponse,"fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
 		}
 	})
+
+
 
 	return r
 }
