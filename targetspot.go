@@ -2,6 +2,8 @@
 
  import (
 	 "fmt"
+	 "github.com/RohanJaiswal/targetspot/config"
+	 "github.com/RohanJaiswal/targetspot/controller"
 	 "log"
 	 "net/http"
 	 "os"
@@ -10,10 +12,10 @@
  func main() {
 	 ready := true
 	 // Read the ENV variables
-	 var endpointMap map[string]Endpoint
-	 err := ReadMockEndpointsData(&endpointMap)
+	 var endpointMap map[string]config.Endpoint
+	 err := config.ReadMockEndpointsData(&endpointMap)
  	fmt.Println("listening...")
-  	router := GetRouter(endpointMap, &ready)
+  	router := controller.GetRouter(endpointMap, &ready)
  	err = http.ListenAndServe(GetPort(), router)
  	if err != nil {
  		log.Fatal("ListenAndServe: ", err)

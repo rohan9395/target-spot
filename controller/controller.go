@@ -1,12 +1,13 @@
-package main
+package controller
 
 import (
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"github.com/RohanJaiswal/targetspot/config"
 )
 
-func GetRouter(endpointMap map[string]Endpoint, ready *bool) (r *gin.Engine) {
+func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engine) {
 	gin.SetMode(gin.ReleaseMode)
 	r = gin.Default()
 
@@ -39,6 +40,7 @@ func GetRouter(endpointMap map[string]Endpoint, ready *bool) (r *gin.Engine) {
 		}
 		jsonParsed, err := gabs.ParseJSON(body)
 		intent, _ := jsonParsed.Path("queryResult.intent.displayName").Data().(string)
+
 		if intent == "spot.distance" {
 			jsonResponse := gabs.New()
 			jsonResponse.Set("calculating Location", "fulfillmentText")
