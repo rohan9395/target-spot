@@ -1,6 +1,9 @@
 package controller
 
 import (
+	"github.com/target-spot/offers"
+	"github.com/target-spot/pharmacy"
+	"github.com/target-spot/store-parking"
 	"net/http"
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
@@ -70,7 +73,24 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			jsonResponse.Set(orderResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
-
+		case "spot.parking":
+			parkingResponse := store_parking.GetParking()
+			jsonResponse := gabs.New()
+			jsonResponse.Set(parkingResponse,"fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.pharmacy":
+			pharmacyResponse := pharmacy.GetPharmacy()
+			jsonResponse := gabs.New()
+			jsonResponse.Set(pharmacyResponse,"fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.offers":
+			offersResponse := offers.Getoffers()
+			jsonResponse := gabs.New()
+			jsonResponse.Set(offersResponse,"fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
 		default:
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
