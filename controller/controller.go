@@ -59,6 +59,14 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			jsonResponse.Set("Nearest Store Set", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
+
+		//handle promotion intent
+		case "spot.promotion":
+			jsonResponse := gabs.New()
+			jsonResponse.Set("Promotion Data", "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+
 		default:
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
