@@ -40,6 +40,7 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 		}
 		jsonParsed, err := gabs.ParseJSON(body)
 		intent, _ := jsonParsed.Path("queryResult.intent.displayName").Data().(string)
+
 		if intent == "spot.distance" {
 			jsonResponse := gabs.New()
 			jsonResponse.Set("calculating Location", "fulfillmentText")
