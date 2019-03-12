@@ -1,1 +1,1 @@
-web: targetspot
+web: target-spot
