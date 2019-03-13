@@ -63,7 +63,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.available":
 			contextName, searchTermMap := util.ContextGet(*jsonParsed)
-			tcinString, price, title := item_search.GetItemDetails(searchTermMap["itemName"].Data().(string))
+			tcinString, price, title := item_search.GetItemDetails(searchTermMap["itemName.original"].Data().(string))
 			jsonResponse := gabs.New()
 			temp := gabs.New()
 			temp.Set(tcinString)
