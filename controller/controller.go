@@ -1,15 +1,15 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
-	"github.com/target-spot/config"
-	"github.com/target-spot/util"
-	"net/http"
 	"github.com/target-spot/colorlizard"
-	"github.com/target-spot/store-details"
-	)
-
+	"github.com/target-spot/config"
+	store_details "github.com/target-spot/store-details"
+	"github.com/target-spot/util"
+)
 
 func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engine) {
 	gin.SetMode(gin.ReleaseMode)
@@ -66,7 +66,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.setstore":
-			contextName,contextMap := util.ContextGet(*jsonParsed)
+			contextName, contextMap := util.ContextGet(*jsonParsed)
 
 			store := store_details.GetStoreID(contextMap["geo-city"].Data().(string))
 			storename := store_details.GetStoreName(store)
@@ -78,52 +78,53 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 
 			contextMap["store"] = temp
 			contextMap["name"] = temp1
-			jsonContext := util.ContextSet(*jsonResponse,"90",contextName,contextMap)
-			storemessage := "Found " + storename + " near your location, setting " +storename+" as your store"
-			jsonResponse.Set(storemessage,"fulfillmentText")
+			jsonContext := util.ContextSet(*jsonResponse, "90", contextName, contextMap)
+			storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
+			jsonResponse.Set(storemessage, "fulfillmentText")
 
 			context.JSON(http.StatusOK, jsonContext.Data())
 			return
 		case "spot.promotion":
+			promoResponse := colorlizard.GetPromo()
 			jsonResponse := gabs.New()
-			jsonResponse.Set("Promotion Data", "fulfillmentText")
+			jsonResponse.Set(promoResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.order":
 			orderResponse := colorlizard.GetOrder()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(orderResponse,"fulfillmentText")
+			jsonResponse.Set(orderResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.parking":
 			parkingResponse := colorlizard.GetParking()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(parkingResponse,"fulfillmentText")
+			jsonResponse.Set(parkingResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.offers":
 			offersResponse := colorlizard.Getoffers()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(offersResponse,"fulfillmentText")
+			jsonResponse.Set(offersResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.payments":
 			paymentsResponse := colorlizard.GetPayments()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(paymentsResponse,"fulfillmentText")
+			jsonResponse.Set(paymentsResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.pets":
 			petsResponse := colorlizard.GetPets()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(petsResponse,"fulfillmentText")
+			jsonResponse.Set(petsResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.pharmacy":
-			_,contextMap := util.ContextGet(*jsonParsed)
+			_, contextMap := util.ContextGet(*jsonParsed)
 			pharmacymsg := store_details.GetPharmacy(contextMap["store"].Data().(string))
 			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg,"fulfillmentText")
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		default:
