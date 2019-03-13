@@ -8,6 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 )
 type HTTPClient struct {
@@ -96,6 +97,32 @@ func GetStorePhone(storeId string ) string {
 	phone := TelephoneNumber.Index(0).Path("phoneNumber").Data().(string)
 
 	return "Phone Number of store is " + phone
+}
+
+
+func GetStoreAddress(storeId string ) string {
+
+	jsonParsed1 := makeStoreDetails(storeId)
+	address := jsonParsed1.Index(0).Path("address.formattedAddress").Data().(string)
+
+	return "Stores address is " + address
+}
+
+func GetStoreTiming(storeId string ) string {
+
+	jsonParsed1 := makeStoreDetails(storeId)
+	starttime := jsonParsed1.Index(0).Path("operatingHours").Index(0).Path("timePeriod.beginTime").Data().(string)
+	endtime := jsonParsed1.Index(0).Path("operatingHours").Index(0).Path("timePeriod.thruTime").Data().(string)
+	start := strings.Split(starttime,":")
+	end := strings.Split(endtime,":")
+	startint, _ := strconv.Atoi(start[0])
+	endint, _ := strconv.Atoi(end[0])
+
+	if len(start) >0 && len(end)>0{
+		return fmt.Sprintf("Stores opens at %d hours in the morning and closes at %d hours in the evening", startint, endint)
+	}else{
+		return "I can't find store timings"
+	}
 }
 
 func makeStoreDetailsbyCity(city string) *gabs.Container{
