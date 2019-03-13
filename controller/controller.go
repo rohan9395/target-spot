@@ -123,7 +123,7 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 	})
 
 	r.GET("/store", func(context *gin.Context) {
-		store := store_details.GetFarmacy("Minneapolis")
+		store := store_details.GetPharmacy("Minneapolis")
 		context.JSON(200, gin.H{
 			"ready": store,
 		})

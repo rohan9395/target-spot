@@ -34,7 +34,7 @@ func GetStoreID(city string ) string {
 	return id
 }
 
-func GetFarmacy(city string ) string {
+func GetPharmacy(city string ) string {
 
 	jsonParsed1 := makeStoreDetailsBaseCall(city)
 	capability := jsonParsed1.Path("Capability.CapabilityName").String()
@@ -112,7 +112,7 @@ func makeStoreDetailsBaseCall(city string) *gabs.Container{
 		log.Error().Err(err).Msg("Unable to create new http request.")
 	}
 
-	h.client = &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{RootCAs: h.pool}}}
+	h.client = &http.Client{Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}}
 
 	response, err := h.client.Do(request)
 	if err != nil {
