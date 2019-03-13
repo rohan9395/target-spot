@@ -58,6 +58,26 @@
 			"Rev": "94122c33edd36123c84d5368cfb2b69df93a0ec8"
 		},
 		{
+			"ImportPath": "github.com/rs/zerolog",
+			"Comment": "v1.12.0-2-g651d361",
+			"Rev": "651d361cfeb9d0f5b9f1d14b162c66c82509ef6d"
+		},
+		{
+			"ImportPath": "github.com/rs/zerolog/internal/cbor",
+			"Comment": "v1.12.0-2-g651d361",
+			"Rev": "651d361cfeb9d0f5b9f1d14b162c66c82509ef6d"
+		},
+		{
+			"ImportPath": "github.com/rs/zerolog/internal/json",
+			"Comment": "v1.12.0-2-g651d361",
+			"Rev": "651d361cfeb9d0f5b9f1d14b162c66c82509ef6d"
+		},
+		{
+			"ImportPath": "github.com/rs/zerolog/log",
+			"Comment": "v1.12.0-2-g651d361",
+			"Rev": "651d361cfeb9d0f5b9f1d14b162c66c82509ef6d"
+		},
+		{
 			"ImportPath": "github.com/ugorji/go/codec",
 			"Comment": "v1.1.2-3-gc4a1c34",
 			"Rev": "c4a1c341dc9362948f6b026f9873abf42a0f6ce9"
