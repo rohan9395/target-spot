@@ -171,7 +171,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.id":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStoreAddress(contextMap["number"].Data().(string))
+			pharmacymsg := store_details.GetStoreAddress(contextMap["number.original"].Data().(string))
 			jsonResponse := gabs.New()
 			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
