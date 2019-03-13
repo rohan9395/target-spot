@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/target-spot/colorlizard"
 	"github.com/target-spot/config"
-	util "github.com/target-spot/config"
 	store_details "github.com/target-spot/store-details"
+	"github.com/target-spot/util"
 )
 
 func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engine) {
@@ -79,7 +79,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			contextMap["store"] = temp
 			contextMap["name"] = temp1
 			jsonContext := util.ContextSet(*jsonResponse, "90", contextName, contextMap)
-			storemessage := "Found " + storename + " near your location, setting " + storename + " as your store"
+			storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
 			jsonResponse.Set(storemessage, "fulfillmentText")
 
 			context.JSON(http.StatusOK, jsonContext.Data())
