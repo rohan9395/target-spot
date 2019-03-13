@@ -11,9 +11,9 @@
 
  func main() {
 	 ready := true
-	 var endpointMap map[string]util.Endpoint
+	 var endpointMap map[string]config.Endpoint
 
-	 err := util.ReadMockEndpointsData(&endpointMap)
+	 err := config.ReadMockEndpointsData(&endpointMap)
 
  	fmt.Println("listening...")
 
