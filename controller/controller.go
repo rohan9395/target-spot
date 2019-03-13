@@ -1,13 +1,15 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
 	"github.com/target-spot/colorlizard"
 	"github.com/target-spot/config"
-	"github.com/target-spot/store-details"
+
+	store_details "github.com/target-spot/store-details"
 	"github.com/target-spot/util"
-	"net/http"
 )
 
 func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engine) {
@@ -84,8 +86,9 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			context.JSON(http.StatusOK, jsonContext.Data())
 			return
 		case "spot.promotion":
+			promoResponse := colorlizard.GetPromo()
 			jsonResponse := gabs.New()
-			jsonResponse.Set("Promotion Data", "fulfillmentText")
+			jsonResponse.Set(promoResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.order":

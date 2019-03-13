@@ -1,74 +1,87 @@
 package colorlizard
 
-
 import (
 	"crypto/tls"
-	"github.com/Jeffail/gabs"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/Jeffail/gabs"
 )
 
-func Getoffers()(string){
+func Getoffers() string {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	resp,_ := http.Get("https://spot-assist.herokuapp.com/colorlizard/offers");
+	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/offers")
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		bodyBytes,_ := ioutil.ReadAll(resp.Body)
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.Path("offers").Data().(string);
+		return jsonParsed.Path("offers").Data().(string)
 	}
 	return ""
 }
 
-func GetOrder()(string){
+func GetOrder() string {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	resp,_ := http.Get("https://spot-assist.herokuapp.com/colorlizard/orderStatus");
+	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/orderStatus")
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		bodyBytes,_ := ioutil.ReadAll(resp.Body)
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.Path("order_status").Data().(string);
+		return jsonParsed.Path("order_status").Data().(string)
 	}
 	return ""
 }
 
-func GetPayments()(string){
+func GetPayments() string {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	resp,_ := http.Get("https://spot-assist.herokuapp.com/colorlizard/payments");
+	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/payments")
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		bodyBytes,_ := ioutil.ReadAll(resp.Body)
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.Path("payments").Data().(string);
+		return jsonParsed.Path("payments").Data().(string)
 	}
 	return ""
 }
 
-func GetPets()(string){
+func GetPets() string {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	resp,_ := http.Get("https://spot-assist.herokuapp.com/colorlizard/pets");
+	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/pets")
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		bodyBytes,_ := ioutil.ReadAll(resp.Body)
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.Path("pets").Data().(string);
+		return jsonParsed.Path("pets").Data().(string)
 	}
 	return ""
 }
 
-func GetParking()(string){
+func GetParking() string {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-	resp,_ := http.Get("https://spot-assist.herokuapp.com/colorlizard/parking");
+	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/parking")
 	defer resp.Body.Close()
 
 	if resp.StatusCode == http.StatusOK {
-		bodyBytes,_ := ioutil.ReadAll(resp.Body)
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.Path("parking").Data().(string);
+		return jsonParsed.Path("parking").Data().(string)
+	}
+	return ""
+}
+
+func GetPromo() string {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/myDummyPromotion")
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		bodyBytes, _ := ioutil.ReadAll(resp.Body)
+		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
+		return jsonParsed.String()
 	}
 	return ""
 }
