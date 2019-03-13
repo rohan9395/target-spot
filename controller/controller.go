@@ -1,16 +1,12 @@
 package controller
 
 import (
-	"github.com/target-spot/offers"
-	"github.com/target-spot/payments"
-	"github.com/target-spot/pets"
+	"github.com/target-spot/colorlizard"
 	"github.com/target-spot/pharmacy"
-	"github.com/target-spot/store-parking"
 	"net/http"
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
 	"github.com/target-spot/config"
-	"github.com/target-spot/order-status"
 )
 
 func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine) {
@@ -70,13 +66,13 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.order":
-			orderResponse := order_status.GetOrder()
+			orderResponse := colorlizard.GetOrder()
 			jsonResponse := gabs.New()
 			jsonResponse.Set(orderResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.parking":
-			parkingResponse := store_parking.GetParking()
+			parkingResponse := colorlizard.GetParking()
 			jsonResponse := gabs.New()
 			jsonResponse.Set(parkingResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
@@ -88,19 +84,19 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.offers":
-			offersResponse := offers.Getoffers()
+			offersResponse := colorlizard.Getoffers()
 			jsonResponse := gabs.New()
 			jsonResponse.Set(offersResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.payments":
-			paymentsResponse := payments.GetPayments()
+			paymentsResponse := colorlizard.GetPayments()
 			jsonResponse := gabs.New()
 			jsonResponse.Set(paymentsResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.pets":
-			petsResponse := pets.GetPets()
+			petsResponse := colorlizard.GetPets()
 			jsonResponse := gabs.New()
 			jsonResponse.Set(petsResponse,"fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
