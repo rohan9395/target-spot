@@ -50,7 +50,7 @@ func GetPharmacy(storeId string ) string {
 func GetStarbucks(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	capability := jsonParsed1.Path("Capability.CapabilityName").String()
+	capability := jsonParsed1.Path("capabilities").String()
 
 	id := strings.Contains(capability,"Starbucks")
 	if id{
@@ -64,7 +64,7 @@ func GetStarbucks(storeId string ) string {
 func GetFresh(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	capability := jsonParsed1.Path("Capability.CapabilityName").String()
+	capability := jsonParsed1.Path("capabilities").String()
 
 	id := strings.Contains(capability,"Fresh Grocery")
 	if id{
@@ -78,7 +78,7 @@ func GetFresh(storeId string ) string {
 func GetPhotoLab(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	capability := jsonParsed1.Path("Capability.CapabilityName").String()
+	capability := jsonParsed1.Path("capabilities").String()
 
 	id := strings.Contains(capability,"Photo Lab")
 	if id{
