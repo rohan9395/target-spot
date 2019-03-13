@@ -162,6 +162,13 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
+		case "spot.timing":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetStoreTiming(contextMap["store"].Data().(string))
+			jsonResponse := gabs.New()
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
 		default:
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
