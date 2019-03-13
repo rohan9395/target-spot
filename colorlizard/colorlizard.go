@@ -81,7 +81,7 @@ func GetPromo() string {
 	if resp.StatusCode == http.StatusOK {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.Data().(string)
+		return jsonParsed.String()
 	}
 	return ""
 }
