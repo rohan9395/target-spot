@@ -98,6 +98,15 @@ func GetStorePhone(storeId string ) string {
 	return "Phone Number of store is " + phone
 }
 
+
+func GetStoreAddress(storeId string ) string {
+
+	jsonParsed1 := makeStoreDetails(storeId)
+	address := jsonParsed1.Index(0).Path("address.formattedAddress").Data().(string)
+
+	return "Stores address is " + address
+}
+
 func makeStoreDetailsbyCity(city string) *gabs.Container{
 	h := HTTPClient{}
 	url := fmt.Sprintf(cityurl, city)
