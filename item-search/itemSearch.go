@@ -32,9 +32,26 @@ func GetItemDetails(searchTerm string) (string, string, string) {
 func GetItemAvailability(searchTcin string, store string) bool {
 
 	jsonParsed1 := makeItemAvailabilityBool(searchTcin, store)
-	isItemAvailable := jsonParsed1.Path("product.available_to_promise_store.products").Index(0).Path("locations").Index(0).Path("onhand_quantity").Data().(float64)
-	if isItemAvailable > 0.0 {
-		return true
+
+	data1, err := jsonParsed1.Path("product.available_to_promise_store.products").Children()
+	if err != nil {
+		//did not get a response from redsky. Return
+		return false
+	} else {
+		for _, child := range data1 {
+			data2, err := child.Path("locations").Children()
+			if err != nil {
+				//did not get a response from redsky. Return
+				return false
+			} else {
+				for _, child2 := range data2 {
+					isItemAvailable := child2.Path("onhand_quantity").Data().(float64)
+					if isItemAvailable > 0.0 {
+						return true
+					}
+				}
+			}
+		}
 	}
 	return false
 }
