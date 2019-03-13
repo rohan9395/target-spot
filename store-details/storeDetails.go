@@ -50,7 +50,7 @@ func GetPharmacy(storeId string ) string {
 func GetStarbucks(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	capability := jsonParsed1.Path("Capability.CapabilityName").String()
+	capability := jsonParsed1.Path("capabilities").String()
 
 	id := strings.Contains(capability,"Starbucks")
 	if id{
@@ -64,7 +64,7 @@ func GetStarbucks(storeId string ) string {
 func GetFresh(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	capability := jsonParsed1.Path("Capability.CapabilityName").String()
+	capability := jsonParsed1.Path("capabilities").String()
 
 	id := strings.Contains(capability,"Fresh Grocery")
 	if id{
@@ -78,7 +78,7 @@ func GetFresh(storeId string ) string {
 func GetPhotoLab(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	capability := jsonParsed1.Path("Capability.CapabilityName").String()
+	capability := jsonParsed1.Path("capabilities").String()
 
 	id := strings.Contains(capability,"Photo Lab")
 	if id{
@@ -92,8 +92,8 @@ func GetPhotoLab(storeId string ) string {
 func GetStorePhone(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	TelephoneNumber := jsonParsed1.Path("TelephoneNumber")
-	phone := TelephoneNumber.Path("PhoneNumber").Index(0).Data().(string)
+	TelephoneNumber := jsonParsed1.Index(0).Path("phoneNumbers")
+	phone := TelephoneNumber.Index(0).Path("phoneNumber").Data().(string)
 
 	return "Phone Number of store is " + phone
 }

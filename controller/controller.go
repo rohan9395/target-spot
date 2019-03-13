@@ -78,7 +78,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 
 			contextMap["store"] = temp
 			contextMap["name"] = temp1
-			jsonContext := util.ContextSet(*jsonResponse, "90", contextName, contextMap)
+			jsonContext := util.ContextSet(*jsonResponse, "900", contextName, contextMap)
 			storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
 			jsonResponse.Set(storemessage, "fulfillmentText")
 
@@ -123,6 +123,34 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 		case "spot.pharmacy":
 			_, contextMap := util.ContextGet(*jsonParsed)
 			pharmacymsg := store_details.GetPharmacy(contextMap["store"].Data().(string))
+			jsonResponse := gabs.New()
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.starbucks":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetStarbucks(contextMap["store"].Data().(string))
+			jsonResponse := gabs.New()
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.fresh":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetFresh(contextMap["store"].Data().(string))
+			jsonResponse := gabs.New()
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.photolab":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetPhotoLab(contextMap["store"].Data().(string))
+			jsonResponse := gabs.New()
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.phone":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetStorePhone(contextMap["store"].Data().(string))
 			jsonResponse := gabs.New()
 			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
