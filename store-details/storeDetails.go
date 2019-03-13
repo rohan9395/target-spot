@@ -92,8 +92,8 @@ func GetPhotoLab(storeId string ) string {
 func GetStorePhone(storeId string ) string {
 
 	jsonParsed1 := makeStoreDetails(storeId)
-	TelephoneNumber := jsonParsed1.Path("TelephoneNumber")
-	phone := TelephoneNumber.Path("PhoneNumber").Index(0).Data().(string)
+	TelephoneNumber := jsonParsed1.Index(0).Path("phoneNumbers")
+	phone := TelephoneNumber.Index(0).Path("phoneNumber").Data().(string)
 
 	return "Phone Number of store is " + phone
 }
