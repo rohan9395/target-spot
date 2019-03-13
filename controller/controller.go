@@ -1,14 +1,14 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/Jeffail/gabs"
 	"github.com/gin-gonic/gin"
-	"github.com/target-spot/config"
-	"net/http"
 	"github.com/target-spot/colorlizard"
-	"github.com/target-spot/store-details"
-	)
-
+	util "github.com/target-spot/config"
+	store_details "github.com/target-spot/store-details"
+)
 
 func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine) {
 	gin.SetMode(gin.ReleaseMode)
@@ -70,38 +70,39 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.promotion":
+			promoResponse := colorlizard.GetPromo()
 			jsonResponse := gabs.New()
-			jsonResponse.Set("Promotion Data", "fulfillmentText")
+			jsonResponse.Set(promoResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.order":
 			orderResponse := colorlizard.GetOrder()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(orderResponse,"fulfillmentText")
+			jsonResponse.Set(orderResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.parking":
 			parkingResponse := colorlizard.GetParking()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(parkingResponse,"fulfillmentText")
+			jsonResponse.Set(parkingResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.offers":
 			offersResponse := colorlizard.Getoffers()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(offersResponse,"fulfillmentText")
+			jsonResponse.Set(offersResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.payments":
 			paymentsResponse := colorlizard.GetPayments()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(paymentsResponse,"fulfillmentText")
+			jsonResponse.Set(paymentsResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.pets":
 			petsResponse := colorlizard.GetPets()
 			jsonResponse := gabs.New()
-			jsonResponse.Set(petsResponse,"fulfillmentText")
+			jsonResponse.Set(petsResponse, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		default:
