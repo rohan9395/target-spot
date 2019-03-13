@@ -81,7 +81,10 @@ func GetPromo() string {
 	if resp.StatusCode == http.StatusOK {
 		bodyBytes, _ := ioutil.ReadAll(resp.Body)
 		jsonParsed, _ := gabs.ParseJSON(bodyBytes)
-		return jsonParsed.String()
+		// S is shorthand for Search
+		return jsonParsed.Path("results").Index(0).Path("promo_desc").Data().(string) + ", " +
+			jsonParsed.Path("results").Index(1).Path("promo_desc").Data().(string) + ", " +
+			jsonParsed.Path("results").Index(2).Path("promo_desc").Data().(string)
 	}
 	return ""
 }
