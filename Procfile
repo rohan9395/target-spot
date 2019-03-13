@@ -1,1 +1,1 @@
-web: target-spot -p $PORT
+web: target-spot
