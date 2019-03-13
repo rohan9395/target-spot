@@ -5,7 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	 "github.com/target-spot/config"
 	"net/http"
-)
+	"github.com/target-spot/store-details"
+	)
 
 func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine) {
 	gin.SetMode(gin.ReleaseMode)
@@ -57,6 +58,14 @@ func GetRouter(endpointMap map[string]util.Endpoint, ready *bool) (r *gin.Engine
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		}
+	})
+
+	r.GET("/store", func(context *gin.Context) {
+		store := store_details.GetFarmacy("Minneapolis")
+		context.JSON(200, gin.H{
+			"ready": store,
+		})
+
 	})
 
 	return r
