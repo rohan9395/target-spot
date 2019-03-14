@@ -75,31 +75,31 @@ func GetParking() string {
 	return ""
 }
 
-func ViewCart(userName string) string{
+func ViewCart(userName string) string {
 	_, ok := carts[userName]
-	if ok{
+	if ok {
 		return carts[userName]
-	}else{
+	} else {
 		return "No items in cart"
 	}
 }
 
-func AddCart(userName string, item string) string{
-	_,ok := carts[userName]
-	if ok{
-		carts[userName]+=  ", " + item
-	}else{
+func AddCart(userName string, item string) string {
+	_, ok := carts[userName]
+	if ok {
+		carts[userName] += ", " + item
+	} else {
 		carts[userName] = "Your cart has " + item
 	}
-	return carts[userName]
+	return "item added to cart"
 }
 
-func CheckoutCart(userName string) string{
-	_,ok := carts[userName]
-	if ok{
+func CheckoutCart(userName string) string {
+	_, ok := carts[userName]
+	if ok {
 		delete(carts, userName)
 		return "Your cart has been successfully checked out."
-	}else{
+	} else {
 		return "No items to check out"
 	}
 
