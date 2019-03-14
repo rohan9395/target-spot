@@ -39,12 +39,12 @@ func GetItemDetails(searchTerm string) (string, string, string) {
 			if child1.Exists("title") {
 				title = child1.Path("title").Data().(string)
 			}
-			if child1.Exists("list_price.formatted_price") {
+			if child1.ExistsP("list_price.formatted_price") {
 				itemPrice = child1.Path("list_price.formatted_price").Data().(string)
-			} else if child1.Exists("offer_price.formatted_price") {
+			} else if child1.ExistsP("offer_price.formatted_price") {
 				itemPrice = child1.Path("offer_price.formatted_price").Data().(string)
 			} else {
-				itemPrice = "is not available"
+				itemPrice = "not available"
 			}
 			return tcinString, itemPrice, title
 		}
