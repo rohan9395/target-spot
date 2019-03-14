@@ -205,7 +205,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.addCart":
 			contextName, contextMap := util.ContextGet(*jsonParsed)
-			itemName := contextMap["itemName"].Data().(string)
+			itemName := contextMap["itemName.original"].Data().(string)
 			cartResponse := colorlizard.AddCart(contextName,itemName)
 			jsonResponse := gabs.New()
 			jsonResponse.Set(cartResponse, "fulfillmentText")
