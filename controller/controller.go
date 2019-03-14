@@ -108,6 +108,17 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 
+		case "spot.price":
+			_, searchTermMap := util.ContextGet(*jsonParsed)
+			jsonResponse := gabs.New()
+			if searchTermMap["itemName.original"].Data().(string) == "" {
+				jsonResponse.Set("No Item to get Price For", "fulfillmentText")
+			} else {
+				jsonResponse.Set(searchTermMap["itemPrice"].Data().(string), "fulfillmentText")
+			}
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+
 		case "spot.setstore":
 			contextName, contextMap := util.ContextGet(*jsonParsed)
 
