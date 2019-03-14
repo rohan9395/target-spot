@@ -196,6 +196,28 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
+		case "spot.viewCart":
+			contextName, _ := util.ContextGet(*jsonParsed)
+			cartResponse := colorlizard.ViewCart(contextName)
+			jsonResponse := gabs.New()
+			jsonResponse.Set(cartResponse, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.addCart":
+			contextName, contextMap := util.ContextGet(*jsonParsed)
+			itemName := contextMap["itemName.original"].Data().(string)
+			cartResponse := colorlizard.AddCart(contextName,itemName)
+			jsonResponse := gabs.New()
+			jsonResponse.Set(cartResponse, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.checkoutCart":
+			contextName,_ := util.ContextGet(*jsonParsed)
+			cartResponse := colorlizard.CheckoutCart(contextName)
+			jsonResponse := gabs.New()
+			jsonResponse.Set(cartResponse, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
 		default:
 			jsonResponse := gabs.New()
 			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
