@@ -57,8 +57,10 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 
 		switch intent {
 		case "spot.distance":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
 			jsonResponse := gabs.New()
-			jsonResponse.Set("calculating Location", "fulfillmentText")
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.available":
