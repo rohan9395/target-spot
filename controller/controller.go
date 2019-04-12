@@ -111,7 +111,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 		case "spot.price":
 			_, searchTermMap := util.ContextGet(*jsonParsed)
 			jsonResponse := gabs.New()
-			if searchTermMap["itemName.original"].Data().(string) == "" {
+			if searchTermMap["itemName.original"].Data() == nil || searchTermMap["itemName.original"].Data().(string) == "" {
 				jsonResponse.Set("No Item to get Price For", "fulfillmentText")
 			} else {
 				jsonResponse.Set(searchTermMap["itemPrice"].Data().(string), "fulfillmentText")
@@ -121,22 +121,28 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 
 		case "spot.setstore":
 			contextName, contextMap := util.ContextGet(*jsonParsed)
-
-			store := store_details.GetStoreID(contextMap["geo-city"].Data().(string))
-			storename := store_details.GetStoreName(store)
 			jsonResponse := gabs.New()
-			temp := gabs.New()
-			temp.Set(store)
-			temp1 := gabs.New()
-			temp1.Set(storename)
+			if contextMap["geo-city"].Data() == nil || contextMap["geo-city"].Data().(string) == "" {
+				jsonResponse.Set("Did not get that. Can you please try again ?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			} else {
 
-			contextMap["store"] = temp
-			contextMap["name"] = temp1
-			jsonContext := util.ContextSet(*jsonResponse, "900", contextName, contextMap)
-			storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
-			jsonResponse.Set(storemessage, "fulfillmentText")
+				store := store_details.GetStoreID(contextMap["geo-city"].Data().(string))
+				storename := store_details.GetStoreName(store)
 
-			context.JSON(http.StatusOK, jsonContext.Data())
+				temp := gabs.New()
+				temp.Set(store)
+				temp1 := gabs.New()
+				temp1.Set(storename)
+
+				contextMap["store"] = temp
+				contextMap["name"] = temp1
+				jsonContext := util.ContextSet(*jsonResponse, "900", contextName, contextMap)
+				storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
+				jsonResponse.Set(storemessage, "fulfillmentText")
+
+				context.JSON(http.StatusOK, jsonContext.Data())
+			}
 			return
 		case "spot.promotion":
 			promoResponse := colorlizard.GetPromo()
