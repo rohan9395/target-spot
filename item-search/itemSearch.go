@@ -23,10 +23,34 @@ const itemAvailabilityURL = "https://redsky.target.com/v1/location_details/%s?st
 func GetItemDetails(searchTerm string) (string, string, string) {
 
 	jsonParsed1 := makeItemSearchDetails(searchTerm)
-	tcinString := jsonParsed1.Path("search_response.items.Item").Index(0).Path("tcin").Data().(string)
-	title := jsonParsed1.Path("search_response.items.Item").Index(0).Path("title").Data().(string)
-	itemPrice := jsonParsed1.Path("search_response.items.Item").Index(0).Path("list_price.formatted_price").Data().(string)
-	return tcinString, itemPrice, title
+
+	data1, err := jsonParsed1.Path("search_response.items.Item").Children()
+	if err != nil {
+		//no data for item found . Return
+		return "", "", ""
+	} else {
+		for _, child1 := range data1 {
+			tcinString := ""
+			title := ""
+			itemPrice := ""
+			if child1.Exists("tcin") {
+				tcinString = child1.Path("tcin").Data().(string)
+			}
+			if child1.Exists("title") {
+				title = child1.Path("title").Data().(string)
+			}
+			if child1.ExistsP("list_price.formatted_price") {
+				itemPrice = child1.Path("list_price.formatted_price").Data().(string)
+			} else if child1.ExistsP("offer_price.formatted_price") {
+				itemPrice = child1.Path("offer_price.formatted_price").Data().(string)
+			} else {
+				itemPrice = "not available"
+			}
+			return tcinString, itemPrice, title
+		}
+	}
+	return "", "", ""
+
 }
 
 func GetItemAvailability(searchTcin string, store string) bool {

@@ -8,6 +8,8 @@ import (
 	"github.com/Jeffail/gabs"
 )
 
+var carts = make(map[string]string)
+
 func Getoffers() string {
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	resp, _ := http.Get("https://spot-assist.herokuapp.com/colorlizard/offers")
@@ -71,6 +73,36 @@ func GetParking() string {
 		return jsonParsed.Path("parking").Data().(string)
 	}
 	return ""
+}
+
+func ViewCart(userName string) string {
+	_, ok := carts[userName]
+	if ok {
+		return carts[userName]
+	} else {
+		return "No items in cart"
+	}
+}
+
+func AddCart(userName string, item string) string {
+	_, ok := carts[userName]
+	if ok {
+		carts[userName] += ", " + item
+	} else {
+		carts[userName] = "Your cart has " + item
+	}
+	return "item added to cart"
+}
+
+func CheckoutCart(userName string) string {
+	_, ok := carts[userName]
+	if ok {
+		delete(carts, userName)
+		return "Your cart has been successfully checked out."
+	} else {
+		return "No items to check out"
+	}
+
 }
 
 func GetPromo() string {

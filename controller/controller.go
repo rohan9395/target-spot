@@ -57,8 +57,10 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 
 		switch intent {
 		case "spot.distance":
+			_, contextMap := util.ContextGet(*jsonParsed)
+			pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
 			jsonResponse := gabs.New()
-			jsonResponse.Set("calculating Location", "fulfillmentText")
+			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.available":
@@ -246,6 +248,33 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
 				context.JSON(http.StatusOK, jsonResponse.Data())
 			}
+			return
+		case "spot.viewCart":
+			contextName, _ := util.ContextGet(*jsonParsed)
+			cartResponse := colorlizard.ViewCart(contextName)
+			jsonResponse := gabs.New()
+			jsonResponse.Set(cartResponse, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.addCart":
+			contextName, searchTermMap := util.ContextGet(*jsonParsed)
+			jsonResponse := gabs.New()
+			_, ok := searchTermMap["itemName.original"]
+			if ok {
+				itemName := searchTermMap["itemName.original"].Data().(string)
+				cartResponse := colorlizard.AddCart(contextName, itemName)
+				jsonResponse.Set(cartResponse, "fulfillmentText")
+			} else {
+				jsonResponse.Set("I dont know which item i should add to cart", "fulfillmentText")
+			}
+			context.JSON(http.StatusOK, jsonResponse.Data())
+			return
+		case "spot.checkoutCart":
+			contextName, _ := util.ContextGet(*jsonParsed)
+			cartResponse := colorlizard.CheckoutCart(contextName)
+			jsonResponse := gabs.New()
+			jsonResponse.Set(cartResponse, "fulfillmentText")
+			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		default:
 			jsonResponse := gabs.New()
