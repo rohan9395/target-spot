@@ -63,41 +63,51 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.available":
 			contextName, searchTermMap := util.ContextGet(*jsonParsed)
-			tcinString, price, title := item_search.GetItemDetails(searchTermMap["itemName.original"].Data().(string))
-			jsonResponse := gabs.New()
-			temp := gabs.New()
-			temp.Set(tcinString)
-			temp1 := gabs.New()
-			temp1.Set(price)
-			searchTermMap["tcin"] = temp
-			searchTermMap["itemPrice"] = temp1
-			jsonContext := util.ContextSet(*jsonResponse, "900", contextName, searchTermMap)
-			isItemAvailable := item_search.GetItemAvailability(tcinString, searchTermMap["store"].Data().(string))
-			if isItemAvailable {
-				jsonResponse.Set(title+" is available at store "+searchTermMap["name"].Data().(string), "fulfillmentText")
-			} else {
-				jsonResponse.Set("Item is Not Available at your store", "fulfillmentText")
+			if searchTermMap !=nil {
+				tcinString, price, title := item_search.GetItemDetails(searchTermMap["itemName.original"].Data().(string))
+				jsonResponse := gabs.New()
+				temp := gabs.New()
+				temp.Set(tcinString)
+				temp1 := gabs.New()
+				temp1.Set(price)
+				searchTermMap["tcin"] = temp
+				searchTermMap["itemPrice"] = temp1
+				jsonContext := util.ContextSet(*jsonResponse, "900", contextName, searchTermMap)
+				isItemAvailable := item_search.GetItemAvailability(tcinString, searchTermMap["store"].Data().(string))
+				if isItemAvailable {
+					jsonResponse.Set(title+" is available at store "+searchTermMap["name"].Data().(string), "fulfillmentText")
+				} else {
+					jsonResponse.Set("Item is Not Available at your store", "fulfillmentText")
+				}
+				context.JSON(http.StatusOK, jsonContext.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
 			}
-			context.JSON(http.StatusOK, jsonContext.Data())
 			return
 		case "spot.setstore":
 			contextName, contextMap := util.ContextGet(*jsonParsed)
+			if contextMap != nil {
+				store := store_details.GetStoreID(contextMap["geo-city"].Data().(string))
+				storename := store_details.GetStoreName(store)
+				jsonResponse := gabs.New()
+				temp := gabs.New()
+				temp.Set(store)
+				temp1 := gabs.New()
+				temp1.Set(storename)
+				contextMap["store"] = temp
+				contextMap["name"] = temp1
+				jsonContext := util.ContextSet(*jsonResponse, "900", contextName, contextMap)
+				storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
+				jsonResponse.Set(storemessage, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonContext.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 
-			store := store_details.GetStoreID(contextMap["geo-city"].Data().(string))
-			storename := store_details.GetStoreName(store)
-			jsonResponse := gabs.New()
-			temp := gabs.New()
-			temp.Set(store)
-			temp1 := gabs.New()
-			temp1.Set(storename)
-
-			contextMap["store"] = temp
-			contextMap["name"] = temp1
-			jsonContext := util.ContextSet(*jsonResponse, "900", contextName, contextMap)
-			storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
-			jsonResponse.Set(storemessage, "fulfillmentText")
-
-			context.JSON(http.StatusOK, jsonContext.Data())
 			return
 		case "spot.promotion":
 			promoResponse := colorlizard.GetPromo()
@@ -137,59 +147,105 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.pharmacy":
 			_, contextMap := util.ContextGet(*jsonParsed)
+			if contextMap != nil{
 			pharmacymsg := store_details.GetPharmacy(contextMap["store"].Data().(string))
 			jsonResponse := gabs.New()
 			jsonResponse.Set(pharmacymsg, "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
+			}else{
+
+			}
 			return
 		case "spot.starbucks":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStarbucks(contextMap["store"].Data().(string))
+			if contextMap != nil {
+				pharmacymsg := store_details.GetStarbucks(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			} else {
 			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
+			jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
+		}
 			return
 		case "spot.fresh":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetFresh(contextMap["store"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap != nil {
+				pharmacymsg := store_details.GetFresh(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		case "spot.photolab":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetPhotoLab(contextMap["store"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap != nil {
+				pharmacymsg := store_details.GetPhotoLab(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		case "spot.phone":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStorePhone(contextMap["store"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap != nil {
+				pharmacymsg := store_details.GetStorePhone(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		case "spot.address":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap != nil {
+				pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		case "spot.timing":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStoreTiming(contextMap["store"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap != nil {
+				pharmacymsg := store_details.GetStoreTiming(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		case "spot.id":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStoreAddress(contextMap["number.original"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap != nil {
+				pharmacymsg := store_details.GetStoreAddress(contextMap["number.original"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		default:
 			jsonResponse := gabs.New()
