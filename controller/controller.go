@@ -318,16 +318,23 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.addCart":
 			contextName, searchTermMap := util.ContextGet(*jsonParsed)
-			jsonResponse := gabs.New()
-			_, ok := searchTermMap["itemName.original"]
-			if ok {
-				itemName := searchTermMap["itemName.original"].Data().(string)
-				cartResponse := colorlizard.AddCart(contextName, itemName)
-				jsonResponse.Set(cartResponse, "fulfillmentText")
+			if searchTermMap != nil {
+				jsonResponse := gabs.New()
+				_, ok := searchTermMap["itemName.original"]
+				if ok {
+					itemName := searchTermMap["itemName.original"].Data().(string)
+					cartResponse := colorlizard.AddCart(contextName, itemName)
+					jsonResponse.Set(cartResponse, "fulfillmentText")
+				} else {
+					jsonResponse.Set("I dont know which item i should add to cart", "fulfillmentText")
+				}
+				context.JSON(http.StatusOK, jsonResponse.Data())
 			} else {
-				jsonResponse.Set("I dont know which item i should add to cart", "fulfillmentText")
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+
 			}
-			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		case "spot.checkoutCart":
 			contextName, _ := util.ContextGet(*jsonParsed)
@@ -338,7 +345,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		default:
 			jsonResponse := gabs.New()
-			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
+			jsonResponse.Set("I didn't get what you just said, to ge things started what's your current city?", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		}
