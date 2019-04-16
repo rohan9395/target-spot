@@ -85,7 +85,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 				if isItemAvailable {
 					jsonResponse.Set(title+" is available at store "+searchTermMap["name"].Data().(string), "fulfillmentText")
 				} else {
-					jsonResponse.Set("Item is Not Available at your store", "fulfillmentText")
+					jsonResponse.Set("Get "+title+" on Target.com", "fulfillmentText")
 				}
 				context.JSON(http.StatusOK, jsonContext.Data())
 			}else {
