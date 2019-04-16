@@ -58,10 +58,16 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 		switch intent {
 		case "spot.distance":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
-			jsonResponse := gabs.New()
-			jsonResponse.Set(pharmacymsg, "fulfillmentText")
-			context.JSON(http.StatusOK, jsonResponse.Data())
+			if contextMap !=nil {
+				pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
+				jsonResponse := gabs.New()
+				jsonResponse.Set(pharmacymsg, "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}else {
+				jsonResponse := gabs.New()
+				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
+				context.JSON(http.StatusOK, jsonResponse.Data())
+			}
 			return
 		case "spot.available":
 			contextName, searchTermMap := util.ContextGet(*jsonParsed)
@@ -278,7 +284,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		default:
 			jsonResponse := gabs.New()
-			jsonResponse.Set("Default Response from Webhook", "fulfillmentText")
+			jsonResponse.Set("Could not get what you said, To get things started what's the city?", "fulfillmentText")
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		}
