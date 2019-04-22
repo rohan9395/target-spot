@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/target-spot/colorlizard"
 	"github.com/target-spot/config"
-	"github.com/target-spot/item-search"
-	"github.com/target-spot/store-details"
+	item_search "github.com/target-spot/item-search"
+	store_details "github.com/target-spot/store-details"
 	"github.com/target-spot/util"
 )
 
@@ -58,12 +58,12 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 		switch intent {
 		case "spot.distance":
 			_, contextMap := util.ContextGet(*jsonParsed)
-			if contextMap !=nil {
+			if contextMap != nil {
 				pharmacymsg := store_details.GetStoreAddress(contextMap["store"].Data().(string))
 				jsonResponse := gabs.New()
 				jsonResponse.Set(pharmacymsg, "fulfillmentText")
 				context.JSON(http.StatusOK, jsonResponse.Data())
-			}else {
+			} else {
 				jsonResponse := gabs.New()
 				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
 				context.JSON(http.StatusOK, jsonResponse.Data())
@@ -71,11 +71,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		case "spot.available":
 			contextName, searchTermMap := util.ContextGet(*jsonParsed)
-<<<<<<< HEAD
-			if searchTermMap !=nil {
-=======
 			if searchTermMap != nil {
->>>>>>> e08133d941e1541ed4eeaa6c3c8cd5809166a8e1
 				tcinString, price, title := item_search.GetItemDetails(searchTermMap["itemName.original"].Data().(string))
 				jsonResponse := gabs.New()
 				temp := gabs.New()
@@ -102,27 +98,6 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 				jsonResponse := gabs.New()
 				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
 				context.JSON(http.StatusOK, jsonResponse.Data())
-<<<<<<< HEAD
-			}
-			return
-		case "spot.setstore":
-			contextName, contextMap := util.ContextGet(*jsonParsed)
-			if contextMap != nil {
-				store := store_details.GetStoreID(contextMap["geo-city"].Data().(string))
-				storename := store_details.GetStoreName(store)
-				jsonResponse := gabs.New()
-				temp := gabs.New()
-				temp.Set(store)
-				temp1 := gabs.New()
-				temp1.Set(storename)
-				contextMap["store"] = temp
-				contextMap["name"] = temp1
-				jsonContext := util.ContextSet(*jsonResponse, "900", contextName, contextMap)
-				storemessage := "Found " + storename + " store near your location, setting " + storename + " as your store"
-				jsonResponse.Set(storemessage, "fulfillmentText")
-				context.JSON(http.StatusOK, jsonContext.Data())
-			}else {
-=======
 
 			}
 			return
@@ -197,15 +172,10 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 					context.JSON(http.StatusOK, jsonContext.Data())
 				}
 			} else {
->>>>>>> e08133d941e1541ed4eeaa6c3c8cd5809166a8e1
 				jsonResponse := gabs.New()
 				jsonResponse.Set("We need your city to get things started, what's your current city?", "fulfillmentText")
 				context.JSON(http.StatusOK, jsonResponse.Data())
 			}
-<<<<<<< HEAD
-
-=======
->>>>>>> e08133d941e1541ed4eeaa6c3c8cd5809166a8e1
 			return
 		case "spot.promotion":
 			promoResponse := colorlizard.GetPromo()
@@ -381,11 +351,7 @@ func GetRouter(endpointMap map[string]config.Endpoint, ready *bool) (r *gin.Engi
 			return
 		default:
 			jsonResponse := gabs.New()
-<<<<<<< HEAD
-			jsonResponse.Set("Could not get what you said, To get things started what's the city?", "fulfillmentText")
-=======
 			jsonResponse.Set("I didn't get what you just said, to ge things started what's your current city?", "fulfillmentText")
->>>>>>> e08133d941e1541ed4eeaa6c3c8cd5809166a8e1
 			context.JSON(http.StatusOK, jsonResponse.Data())
 			return
 		}
