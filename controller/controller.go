@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/target-spot/colorlizard"
 	"github.com/target-spot/config"
-	"github.com/target-spot/item-search"
-	"github.com/target-spot/store-details"
+	item_search "github.com/target-spot/item-search"
+	store_details "github.com/target-spot/store-details"
 	"github.com/target-spot/util"
 )
 
